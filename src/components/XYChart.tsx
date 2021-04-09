@@ -1,17 +1,17 @@
 import React from "react";
 import {
-    XYPlot,
     VerticalGridLines,
     HorizontalGridLines,
     XAxis,
     YAxis,
     DiscreteColorLegend,
-    LineMarkSeries
+    LineMarkSeries, FlexibleXYPlot
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
+import {Series} from "../models/series.model";
 
 interface XYChartProps {
-    data: SeriesPoint[];
+    data: Series[];
 
     onValueMouseOverCallback?: (dataPoint: SeriesPoint, target: SVGGraphicsElement) => void;
     onValueMouseOutCallback?: (e: any) => void;
@@ -32,15 +32,6 @@ const XYChart: React.FC<XYChartProps> = (props) => {
         if(!props.onValueMouseOverCallback) { return; }
         props.onValueMouseOverCallback(datapoint, e.event.target);
     }
-    const onUserMouseOver = (datapoint: SeriesPoint, e: any) => {
-        e.event.stopPropagation();
-
-        const customSvgSeries = document.querySelector("g.custom-svg-series-anchor") as SVGGraphicsElement;
-        if(!customSvgSeries) { return; }
-
-        if(!props.onValueMouseOverCallback) { return; }
-        props.onValueMouseOverCallback(datapoint, customSvgSeries);
-    }
 
     const onValueMouseOut = (datapoint: SeriesPoint, e: any) => {
         e.event.stopPropagation();
@@ -55,21 +46,16 @@ const XYChart: React.FC<XYChartProps> = (props) => {
     }
 
     const getLegend = () => {
-        return [
-            {
-                title: "User",
-                color: "red"
-            },
-            {
-                title: "Coffee Shops",
-                color: "rgb(18 147 154)"
-            }
-        ];
+        return props.data.map(series => ({
+            title: series.name,
+            color: "red"
+        }));
     }
 
     return (
         <div data-testid={"XY-Chart"}>
-            <XYPlot
+            <FlexibleXYPlot
+                xType="time"
                 width={1000}
                 height={600}
                 style={{position: "absolute"}}
@@ -80,20 +66,24 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                 <XAxis />
                 <YAxis />
 
-                <LineMarkSeries
-                    className="mark-series-overrides"
-                    data={props.data as any[]}
-                    onValueClick={onValueClick}
-                    onValueMouseOver={onValueMouseOver}
-                    onValueMouseOut={onValueMouseOut}
-
-                    style={{
-                        strokeWidth: '3px'
-                    }}
-                    lineStyle={{stroke: 'red'}}
-                    markStyle={{stroke: 'blue'}}
-                />
-            </XYPlot>
+                {
+                    props.data.map(series => (
+                        <LineMarkSeries
+                            key={series.name}
+                            className="mark-series-overrides"
+                            data={series.values}
+                            onValueClick={onValueClick}
+                            onValueMouseOver={onValueMouseOver}
+                            onValueMouseOut={onValueMouseOut}
+                            style={{
+                                strokeWidth: '3px'
+                            }}
+                            lineStyle={{stroke: 'red'}}
+                            markStyle={{stroke: 'blue'}}
+                        />
+                    ))
+                }
+            </FlexibleXYPlot>
             <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
             {props.children}
         </div>

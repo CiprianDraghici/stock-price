@@ -10,9 +10,10 @@ const initializeService = InitializeService.getInstance();
 
 initializeService.init().then(() => {
     ReactDOM.render(
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>,
+        // <React.StrictMode>
+            // <App />
+        // </React.StrictMode>
+        <App />,
         document.getElementById('root')
     );
 }).catch(() => {

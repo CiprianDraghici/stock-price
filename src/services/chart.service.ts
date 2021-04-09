@@ -1,10 +1,10 @@
 import {HttpService} from "./http.service";
 import {ChartServiceContract} from "../contracts/chart-service.contract";
 import {StockCandle} from "../models/stock-candle.model";
-import {DataPoint} from "../models/data-point.model";
 import {SecurityService} from "./security.service";
 import {Resolution} from "../enums/resolution.enum";
 import {StockSymbol} from "../models/stock-symbol.model";
+import {SeriesPoint} from "../models/series-point.model";
 
 export class ChartService implements ChartServiceContract {
     public async getSymbols(): Promise<StockSymbol[] | null> {
@@ -45,16 +45,16 @@ export class ChartService implements ChartServiceContract {
     }
 
     public buildDataPoints(model: StockCandle, customProps?: object) {
-        const dataPoints: DataPoint[] = [...
-            model.c.reduce((acc, curr, idx) => {
+        const dataPoints: SeriesPoint[] = [...model.c.reduce((acc, curr, idx) => {
+                const x = new Date(model.t[idx]*1000); // moment(moment.unix(model.t[idx]).format("MM/DD/YYYY")).toDate();
                 acc.push({
-                    x: new Date(model.t[idx]),
+                    x,
                     y: curr,
                     color: "red",
                     ...customProps
                 })
                 return acc;
-            }, [] as DataPoint[])
+            }, [] as SeriesPoint[])
         ];
 
         return dataPoints;
