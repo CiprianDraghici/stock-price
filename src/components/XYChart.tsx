@@ -5,7 +5,10 @@ import {
     XAxis,
     YAxis,
     DiscreteColorLegend,
-    LineMarkSeries, FlexibleXYPlot, Voronoi, MarkSeries, LineSeries
+    LineMarkSeries,
+    FlexibleXYPlot,
+    LineSeries,
+    LabelSeries
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
@@ -83,7 +86,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
             })
         }
 
-        if(props.showAverage) {
+        if(props.showAverage && props.data.values.length > 1) {
             items.push({
                 title: "Average",
                 color: "grey"
@@ -120,19 +123,6 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                     markStyle={{stroke: 'blue'}}
                 />
 
-                <LineMarkSeries
-                    className="mark-series-overrides"
-                    data={props.data.values}
-                    onValueClick={onValueClick}
-                    onValueMouseOver={onValueMouseOver}
-                    onValueMouseOut={onValueMouseOut}
-                    style={{
-                        strokeWidth: '3px'
-                    }}
-                    lineStyle={{stroke: 'red'}}
-                    markStyle={{stroke: 'blue'}}
-                />
-
                 {
                     props.showAverage &&
                     <LineSeries
@@ -142,10 +132,15 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                         }}
                         strokeStyle={"dashed"}
                         color={"grey"}
-
                     />
                 }
-
+                {
+                    (props.showAverage && props.data.values.length > 1) &&
+                    <LabelSeries allowOffsetToBeReversed={true} data={[{
+                        ...averageSeries?.values[0],
+                        label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
+                    }] as any[]}/>
+                }
             </FlexibleXYPlot>
             <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
             {props.children}
