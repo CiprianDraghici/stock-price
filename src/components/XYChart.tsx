@@ -1,17 +1,18 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     VerticalGridLines,
     HorizontalGridLines,
     XAxis,
     YAxis,
     DiscreteColorLegend,
-    LineMarkSeries, FlexibleXYPlot
+    LineMarkSeries, FlexibleXYPlot, Voronoi, MarkSeries, LineSeries
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
 
 interface XYChartProps {
-    data: Series[];
+    data: Series;
+    showAverage?: boolean;
 
     onValueMouseOverCallback?: (dataPoint: SeriesPoint, target: SVGGraphicsElement) => void;
     onValueMouseOutCallback?: (e: any) => void;
@@ -19,6 +20,33 @@ interface XYChartProps {
 }
 
 const XYChart: React.FC<XYChartProps> = (props) => {
+    const [averageSeries, setAverageSeries] = useState<Series | null>();
+
+    const getAverageValue = () => {
+        return props.data.values.reduce((acc, d) => acc + Number(d.y), 0) / props.data.values.length;
+    }
+
+    const computeAverageSeries = () => {
+        const avgValue = getAverageValue();
+        const fillValues = props.data.values.map(x => ({
+            ...x,
+            y: avgValue
+        }));
+
+        setAverageSeries({
+            name: "Average",
+            values: fillValues
+        });
+    }
+
+    useEffect(() => {
+        computeAverageSeries();
+    }, []);
+
+    useEffect(() => {
+        computeAverageSeries();
+    }, [props.data]);
+
     const onValueClick = (datapoint: SeriesPoint, e: any) => {
         e.event.stopPropagation();
 
@@ -46,10 +74,23 @@ const XYChart: React.FC<XYChartProps> = (props) => {
     }
 
     const getLegend = () => {
-        return props.data.map(series => ({
-            title: series.name,
-            color: "red"
-        }));
+        const items = [];
+
+        if(props.data.name) {
+            items.push({
+                title: props.data.name,
+                color: "red"
+            })
+        }
+
+        if(props.showAverage) {
+            items.push({
+                title: "Average",
+                color: "grey"
+            })
+        }
+
+        return items;
     }
 
     return (
@@ -66,23 +107,45 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                 <XAxis />
                 <YAxis />
 
+                <LineMarkSeries
+                    className="mark-series-overrides"
+                    data={props.data.values}
+                    onValueClick={onValueClick}
+                    onValueMouseOver={onValueMouseOver}
+                    onValueMouseOut={onValueMouseOut}
+                    style={{
+                        strokeWidth: '3px'
+                    }}
+                    lineStyle={{stroke: 'red'}}
+                    markStyle={{stroke: 'blue'}}
+                />
+
+                <LineMarkSeries
+                    className="mark-series-overrides"
+                    data={props.data.values}
+                    onValueClick={onValueClick}
+                    onValueMouseOver={onValueMouseOver}
+                    onValueMouseOut={onValueMouseOut}
+                    style={{
+                        strokeWidth: '3px'
+                    }}
+                    lineStyle={{stroke: 'red'}}
+                    markStyle={{stroke: 'blue'}}
+                />
+
                 {
-                    props.data.map(series => (
-                        <LineMarkSeries
-                            key={series.name}
-                            className="mark-series-overrides"
-                            data={series.values}
-                            onValueClick={onValueClick}
-                            onValueMouseOver={onValueMouseOver}
-                            onValueMouseOut={onValueMouseOut}
-                            style={{
-                                strokeWidth: '3px'
-                            }}
-                            lineStyle={{stroke: 'red'}}
-                            markStyle={{stroke: 'blue'}}
-                        />
-                    ))
+                    props.showAverage &&
+                    <LineSeries
+                        data={averageSeries?.values as any[]}
+                        style={{
+                            strokeWidth: '1px'
+                        }}
+                        strokeStyle={"dashed"}
+                        color={"grey"}
+
+                    />
                 }
+
             </FlexibleXYPlot>
             <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
             {props.children}

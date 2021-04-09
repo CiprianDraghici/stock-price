@@ -6,7 +6,8 @@ import {Series} from "../models/series.model";
 import moment from "moment";
 
 interface ChartProps {
-    data: Series[];
+    data: Series;
+    showAverage?: boolean;
 }
 
 interface TooltipPosition {
@@ -45,7 +46,7 @@ const Chart: React.FC<ChartProps> = (props) => {
 
     return (
         <div data-testid={"Chart"}>
-            <XYChart data={props.data} onValueMouseOverCallback={onValueMouseOver} onValueMouseOutCallback={onValueMouseOut}>
+            <XYChart data={props.data} showAverage={props.showAverage} onValueMouseOverCallback={onValueMouseOver} onValueMouseOutCallback={onValueMouseOut}>
                 <Tooltip show={!!tooltipPosition} position={{...tooltipPosition!}} content={TooltipContent} />
             </XYChart>
         </div>

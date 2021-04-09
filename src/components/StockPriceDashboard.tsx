@@ -9,19 +9,21 @@ import {Series} from "../models/series.model";
 import moment from "moment";
 
 const StockPriceDashboard: React.FC = (props) => {
+    const emptyChartData = {
+        name: "",
+        values: []
+    };
+
     const [stockData, setStockData] = useState<StockCandle | null>(null);
-    const [chartData, setChartData] = useState<Series[]>([]);
+    const [chartData, setChartData] = useState<Series>(emptyChartData);
     const [selectedSymbol, setSelectedSymbol] = useState<string>();
     const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.M);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
         start: new Date(),
         end: new Date()
     });
+    const [showAverage, setShowAverage] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        setChartData([]);
-    }, []);
 
     useEffect(() => {
         getDataAsync();
@@ -32,17 +34,15 @@ const StockPriceDashboard: React.FC = (props) => {
         if(!stockData) { return; }
 
         if(stockData.s === "no_data") {
-            setChartData([]);
+            setChartData(emptyChartData);
             return;
         }
 
         const series = chartService.buildDataPoints(stockData, {size: 20, seriesName: selectedSymbol});
-        setChartData([
-            {
-                name: selectedSymbol || "",
-                values: series
-            }
-        ]);
+        setChartData({
+            name: selectedSymbol || "",
+            values: series
+        });
         setError(null);
     }, [stockData]);
 
@@ -71,14 +71,18 @@ const StockPriceDashboard: React.FC = (props) => {
     const onDateRangeChange = (value: DateRange) => {
         setSelectedDateRange(value);
     }
-    
+
+    const onShowAverageChange = (value: boolean) => {
+        setShowAverage(value);
+    }
+
     return (
         <div>
-            <StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} />
+            <StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />
             { error }
             {
                 !error &&
-                <Chart data={chartData} />
+                <Chart data={chartData} showAverage={showAverage} />
             }
         </div>
     )
