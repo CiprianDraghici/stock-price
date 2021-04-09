@@ -1,0 +1,5 @@
+Create a stock price web app using Yahoo Finance, Alpha Vantage, Finnhub, or any other Stock Quote provider, with the following specifications:
+- user provides a stock symbol to see the price of the stock plotted on a chart (for a given time period);
+- users should be able to type the symbol or to search a company listed on the stocks market;
+- the time period should be customizable, having a start and an end date that can be manually updated by the user;
+- users should also be able to overlay the average value of the stock prices on the chart that can be manually enabled or disabled.

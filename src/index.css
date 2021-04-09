@@ -1,0 +1,44 @@
+@import "~react-vis/dist/style.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~react-toastify/dist/ReactToastify.css';
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.inline-code {
+  padding: 1rem 2rem;
+  overflow-x: hidden;
+}
+
+.inline-code.container>div {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.custom-tooltip {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 10px;
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+  font-family: sans-serif;
+  white-space: nowrap;
+}
+
+.mark-series-overrides {
+  cursor: pointer;
+}
