@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './content/App.css';
 import StockPriceDashboard from "./components/StockPriceDashboard";
 
 function App() {

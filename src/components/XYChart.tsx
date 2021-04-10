@@ -86,13 +86,6 @@ const XYChart: React.FC<XYChartProps> = (props) => {
             })
         }
 
-        if(props.showAverage && props.data.values.length > 1) {
-            items.push({
-                title: "Average",
-                color: "grey"
-            })
-        }
-
         return items;
     }
 
