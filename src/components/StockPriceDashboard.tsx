@@ -7,6 +7,8 @@ import {Resolution} from "../enums/resolution.enum";
 import {DateRange} from "../models/date-range.model";
 import {Series} from "../models/series.model";
 import moment from "moment";
+import Shell from "./panel/Shell";
+import Resolutions from "./Resolutions";
 
 const StockPriceDashboard: React.FC = (props) => {
     const emptyChartData = {
@@ -17,7 +19,7 @@ const StockPriceDashboard: React.FC = (props) => {
     const [stockData, setStockData] = useState<StockCandle | null>(null);
     const [chartData, setChartData] = useState<Series>(emptyChartData);
     const [selectedSymbol, setSelectedSymbol] = useState<string>();
-    const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.M);
+    const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
         start: new Date(),
         end: new Date()
@@ -78,12 +80,15 @@ const StockPriceDashboard: React.FC = (props) => {
 
     return (
         <div>
+            <Shell>
+                { error }
+                {
+                    !error &&
+                    <Chart data={chartData} showAverage={showAverage} />
+                }
+                <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
+            </Shell>
             <StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />
-            { error }
-            {
-                !error &&
-                <Chart data={chartData} showAverage={showAverage} />
-            }
         </div>
     )
 }
