@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {FormControlLabel, Switch} from "@material-ui/core";
+import {Checkbox, CheckboxProps, FormControlLabel, Switch, withStyles} from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 
 interface StockPriceToolbarProps {
-    showStateText: string;
-    hideStateText: string;
+    label: string;
     handleShowStateChange: (value: boolean) => void;
 }
 
@@ -16,10 +16,20 @@ const ToggleButton: React.FC<StockPriceToolbarProps> = (props) => {
         props.handleShowStateChange(value);
     };
 
+    const GreenCheckbox = withStyles({
+        root: {
+            color: green[400],
+            '&$checked': {
+                color: green[600],
+            },
+        },
+        checked: {},
+    })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+
     return (
         <FormControlLabel
-            control={<Switch checked={showState} onChange={onShowAverageChange} />}
-            label={showState ? props.hideStateText : props.showStateText}
+            control={<GreenCheckbox checked={showState} onChange={onShowAverageChange} />}
+            label={props.label}
         />
     )
 }

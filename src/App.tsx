@@ -5,9 +5,7 @@ import StockPriceDashboard from "./components/StockPriceDashboard";
 function App() {
     return (
         <div className="App">
-            <div className="container">
-                <StockPriceDashboard />
-            </div>
+            <StockPriceDashboard />
         </div>
     );
 }

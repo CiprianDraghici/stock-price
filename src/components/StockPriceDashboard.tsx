@@ -9,6 +9,11 @@ import {Series} from "../models/series.model";
 import moment from "moment";
 import Shell from "./panel/Shell";
 import Resolutions from "./Resolutions";
+import {Box, Card, Divider, Grid} from "@material-ui/core";
+import Panel from "./panel/Panel";
+import ToggleButton from "./ToggleButton";
+import StockSymbol from "./StockSymbol";
+import TimeRange from "./TimeRange";
 
 const StockPriceDashboard: React.FC = (props) => {
     const emptyChartData = {
@@ -78,17 +83,36 @@ const StockPriceDashboard: React.FC = (props) => {
         setShowAverage(value);
     }
 
+
     return (
         <div>
-            <Shell>
-                { error }
-                {
-                    !error &&
-                    <Chart data={chartData} showAverage={showAverage} />
+            <Shell settingsComponent={
+                    <Panel>
+                        <StockSymbol handleSymbolChange={onSymbolChange} />
+                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
+                            <ToggleButton label={"Show average"} handleShowStateChange={onShowAverageChange} />
+                        </Box>
+                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
+                            <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
+                        </Box>
+                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
+                            <TimeRange handlePeriodChange={onDateRangeChange} />
+                        </Box>
+                        {/*<StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />*/}
+                    </Panel>
                 }
-                <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
+                contentComponent={
+                    <>
+                        { error }
+                        {
+                            !error &&
+                            <Chart data={chartData} showAverage={showAverage} />
+                            // <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
+                        }
+                    </>
+                }
+            >
             </Shell>
-            <StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />
         </div>
     )
 }
