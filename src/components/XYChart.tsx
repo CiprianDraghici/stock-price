@@ -84,6 +84,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                 height={600}
                 // style={{position: "absolute"}}
                 onClick={onClick}
+                style={{marginTop: "5em"}}
             >
                 <VerticalGridLines />
                 <HorizontalGridLines />

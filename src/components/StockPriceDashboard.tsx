@@ -2,20 +2,14 @@ import React, {useEffect, useState} from "react";
 import Chart from "./Chart";
 import {ChartService} from "../services/chart.service";
 import {StockCandle} from "../models/stock-candle.model";
-import StockPriceToolbar from "./StockPriceToolbar";
 import {Resolution} from "../enums/resolution.enum";
 import {DateRange} from "../models/date-range.model";
 import {Series} from "../models/series.model";
-import moment from "moment";
 import Shell from "./panel/Shell";
-import Resolutions from "./Resolutions";
-import {Box, Card, Divider, Grid} from "@material-ui/core";
-import Panel from "./panel/Panel";
-import ToggleButton from "./ToggleButton";
-import StockSymbol from "./StockSymbol";
-import TimeRange from "./TimeRange";
 import DateRangesShortcut from "./DateRangesShortcut";
 import {DateRanges} from "../enums/date-ranges.enum";
+import ChartSettingsPanel from "./ChartSettingsPanel";
+import {StockSettings} from "../models/stock.settings";
 
 const StockPriceDashboard: React.FC = (props) => {
     const emptyChartData = {
@@ -25,19 +19,18 @@ const StockPriceDashboard: React.FC = (props) => {
 
     const [stockData, setStockData] = useState<StockCandle | null>(null);
     const [chartData, setChartData] = useState<Series>(emptyChartData);
-    const [selectedSymbol, setSelectedSymbol] = useState<string>();
-    const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
+
     const [selectedDateRangeShortcut, setSelectedDateRangeShortcut] = useState<DateRanges>(DateRanges.CurrentDay);
-    const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
-        startDate: new Date(),
-        endDate: new Date()
-    });
-    const [showAverage, setShowAverage] = useState<boolean>(false);
+    const [settings, setSettings] = useState<StockSettings>();
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        getDataAsync();
-    }, [selectedSymbol, selectedResolution, selectedDateRange]);
+        getDataAsync(settings);
+    }, []);
+
+    useEffect(() => {
+        getDataAsync(settings);
+    }, [settings]);
 
     useEffect(() => {
         const chartService: ChartService = new ChartService();
@@ -48,21 +41,21 @@ const StockPriceDashboard: React.FC = (props) => {
             return;
         }
 
-        const series = chartService.buildDataPoints(stockData, {seriesName: selectedSymbol});
+        const series = chartService.buildDataPoints(stockData, {seriesName: settings?.symbol});
         setChartData({
-            name: selectedSymbol || "",
+            name: settings?.symbol || "",
             values: series
         });
         setError(null);
     }, [stockData]);
 
-    const getDataAsync = async () => {
-        if(!selectedSymbol) { return; }
+    const getDataAsync = async (settings?: StockSettings) => {
+        if(!settings || !settings.symbol) { return; }
 
         const chartService: ChartService = new ChartService();
         try {
-            const data = await chartService.getData(selectedSymbol, selectedResolution || Resolution.M, "1572651390", "1575243390");
-            // const data = await chartService.getData(selectedSymbol, selectedResolution || Resolution.D, moment(selectedDateRange.start).unix().toString(), moment(selectedDateRange.end).unix().toString());
+            const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, "1572651390", "1575243390");
+            // const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, moment(settings.dateRange?.startDate).unix().toString(), moment(settings.dateRange?.endDate).unix().toString());
             console.log(data);
             setStockData(data as StockCandle);
         } catch (err) {
@@ -70,61 +63,35 @@ const StockPriceDashboard: React.FC = (props) => {
         }
     }
 
-    const onSymbolChange = (value: string) => {
-        setSelectedSymbol(value);
-    }
-
-    const onResolutionChange = (value: Resolution) => {
-        setSelectedResolution(value);
-    }
-
-    const onDateRangeChange = (value: DateRange) => {
-        setSelectedDateRange(value);
+    const handleApplySettings = (settings: StockSettings) => {
+        setSettings(settings);
     }
 
     const onDateRangeShortcutChange = (selectedDateRange: DateRanges, value: DateRange) => {
         setSelectedDateRangeShortcut(selectedDateRange);
-        setSelectedDateRange(value);
+        setSettings({
+            ...settings,
+            dateRange: value
+        })
     }
-
-    const onShowAverageChange = (value: boolean) => {
-        setShowAverage(value);
-    }
-
 
     return (
-        <div>
-            <Shell settingsComponent={
-                    <Panel>
-                        <StockSymbol handleSymbolChange={onSymbolChange} />
-                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                            <ToggleButton label={"Show average"} handleShowStateChange={onShowAverageChange} />
-                        </Box>
-                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                            <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
-                        </Box>
-                        <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                            <TimeRange dateRange={selectedDateRange} handlePeriodChange={onDateRangeChange} />
-                        </Box>
-                        {/*<StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />*/}
-                    </Panel>
-                }
-                contentComponent={
-                    <>
-                        { error }
-                        {
-                            !error &&
-                            <>
-                                <Chart data={chartData} showAverage={showAverage} />
-                                <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
-                            </>
-                            // <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
-                        }
-                    </>
-                }
-            >
-            </Shell>
-        </div>
+        <Shell
+            settingsComponent={<ChartSettingsPanel handleApplySettings={handleApplySettings} />}
+            contentComponent={
+                <>
+                    { error }
+                    {
+                        !error &&
+                        <>
+                            <Chart data={chartData} showAverage={settings?.showAverage} />
+                            <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
+                        </>
+                    }
+                </>
+            }
+        >
+        </Shell>
     )
 }
 

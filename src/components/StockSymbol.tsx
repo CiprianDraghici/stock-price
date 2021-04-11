@@ -3,7 +3,7 @@ import {ChartService} from "../services/chart.service";
 import VirtualizedSelect from "react-virtualized-select";
 // @ts-ignore
 import createfilteroptions from "react-select-fast-filter-options";
-import {Option, Options} from "react-select";
+import {Option} from "react-select";
 import ControlLabel from "./panel/ControlLabel";
 
 interface StockSymbolProps {
