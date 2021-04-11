@@ -3,6 +3,9 @@
 @import '~react-toastify/dist/ReactToastify.css';
 @import '~semantic-ui-css/semantic.min.css';
 @import '~react-dropdown/style.css';
+@import '~react-select/dist/react-select.css';
+@import '~react-virtualized/styles.css';
+@import '~react-virtualized-select/styles.css';
 
 body {
   margin: 0;
