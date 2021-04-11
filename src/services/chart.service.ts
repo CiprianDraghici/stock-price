@@ -50,7 +50,6 @@ export class ChartService implements ChartServiceContract {
                 acc.push({
                     x,
                     y: curr,
-                    color: "red",
                     ...customProps
                 })
                 return acc;

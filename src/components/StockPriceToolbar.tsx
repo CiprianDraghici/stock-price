@@ -54,8 +54,8 @@ const StockPriceToolbar: React.FC<StockPriceToolbarProps> = (props) => {
 
     const onClosePicker = () => {
         props.handleDateRangeChange({
-            start: selectedStartDate || new  Date(),
-            end: selectedEndDate || new  Date()
+            startDate: selectedStartDate || new  Date(),
+            endDate: selectedEndDate || new  Date()
         });
     }
 

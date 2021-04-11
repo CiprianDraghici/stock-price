@@ -76,26 +76,13 @@ const XYChart: React.FC<XYChartProps> = (props) => {
         props.onValueClickCallback(null);
     }
 
-    const getLegend = () => {
-        const items = [];
-
-        if(props.data.name) {
-            items.push({
-                title: props.data.name,
-                color: "red"
-            })
-        }
-
-        return items;
-    }
-
     return (
         <div data-testid={"XY-Chart"}>
             <FlexibleXYPlot
                 xType="time"
-                width={1000}
+                // width={1000}
                 height={600}
-                style={{position: "absolute"}}
+                // style={{position: "absolute"}}
                 onClick={onClick}
             >
                 <VerticalGridLines />
@@ -109,11 +96,11 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                     onValueClick={onValueClick}
                     onValueMouseOver={onValueMouseOver}
                     onValueMouseOut={onValueMouseOut}
-                    style={{
-                        strokeWidth: '3px'
-                    }}
-                    lineStyle={{stroke: 'red'}}
-                    markStyle={{stroke: 'blue'}}
+                    // style={{
+                    //     strokeWidth: '3px'
+                    // }}
+                    // lineStyle={{stroke: 'red'}}
+                    // markStyle={{stroke: 'blue'}}
                 />
 
                 {
@@ -135,7 +122,6 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                     }] as any[]}/>
                 }
             </FlexibleXYPlot>
-            <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
             {props.children}
         </div>
     )

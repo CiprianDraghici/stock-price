@@ -14,6 +14,8 @@ import Panel from "./panel/Panel";
 import ToggleButton from "./ToggleButton";
 import StockSymbol from "./StockSymbol";
 import TimeRange from "./TimeRange";
+import DateRangesShortcut from "./DateRangesShortcut";
+import {DateRanges} from "../enums/date-ranges.enum";
 
 const StockPriceDashboard: React.FC = (props) => {
     const emptyChartData = {
@@ -25,9 +27,10 @@ const StockPriceDashboard: React.FC = (props) => {
     const [chartData, setChartData] = useState<Series>(emptyChartData);
     const [selectedSymbol, setSelectedSymbol] = useState<string>();
     const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
+    const [selectedDateRangeShortcut, setSelectedDateRangeShortcut] = useState<DateRanges>(DateRanges.CurrentDay);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
-        start: new Date(),
-        end: new Date()
+        startDate: new Date(),
+        endDate: new Date()
     });
     const [showAverage, setShowAverage] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -45,7 +48,7 @@ const StockPriceDashboard: React.FC = (props) => {
             return;
         }
 
-        const series = chartService.buildDataPoints(stockData, {size: 20, seriesName: selectedSymbol});
+        const series = chartService.buildDataPoints(stockData, {seriesName: selectedSymbol});
         setChartData({
             name: selectedSymbol || "",
             values: series
@@ -79,6 +82,11 @@ const StockPriceDashboard: React.FC = (props) => {
         setSelectedDateRange(value);
     }
 
+    const onDateRangeShortcutChange = (selectedDateRange: DateRanges, value: DateRange) => {
+        setSelectedDateRangeShortcut(selectedDateRange);
+        setSelectedDateRange(value);
+    }
+
     const onShowAverageChange = (value: boolean) => {
         setShowAverage(value);
     }
@@ -96,7 +104,7 @@ const StockPriceDashboard: React.FC = (props) => {
                             <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
                         </Box>
                         <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                            <TimeRange handlePeriodChange={onDateRangeChange} />
+                            <TimeRange dateRange={selectedDateRange} handlePeriodChange={onDateRangeChange} />
                         </Box>
                         {/*<StockPriceToolbar handleSymbolChange={onSymbolChange} handleResolutionChange={onResolutionChange} handleDateRangeChange={onDateRangeChange} handleShowAverageChange={onShowAverageChange} />*/}
                     </Panel>
@@ -106,7 +114,10 @@ const StockPriceDashboard: React.FC = (props) => {
                         { error }
                         {
                             !error &&
-                            <Chart data={chartData} showAverage={showAverage} />
+                            <>
+                                <Chart data={chartData} showAverage={showAverage} />
+                                <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
+                            </>
                             // <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
                         }
                     </>

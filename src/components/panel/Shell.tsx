@@ -65,13 +65,11 @@ export const Shell: React.FC<ShellProps> = (props) => {
             <Drawer
                 variant="permanent"
                 className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
+                    [classes.drawerOpen]: open
                 })}
                 classes={{
                     paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
+                        [classes.drawerOpen]: open
                     }),
                 }}
             >
@@ -81,7 +79,6 @@ export const Shell: React.FC<ShellProps> = (props) => {
                 <Divider />
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar} />
                 {
                     props.contentComponent
                 }

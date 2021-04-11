@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Resolution} from "../enums/resolution.enum";
-import {Box, Button, ButtonGroup} from "@material-ui/core";
+import {Button, ButtonGroup} from "@material-ui/core";
 import ControlLabel from "./panel/ControlLabel";
 
 interface ResolutionsProps {
@@ -24,7 +24,7 @@ const Resolutions: React.FC<ResolutionsProps> = (props) => {
             <ButtonGroup size="small" aria-label="small outlined button group" aria-labelledby={"Resolution"}>
                 {
                     resolutionOptions.map(option => (
-                        <Button key={option} color={selectedResolution === option ? "primary" : undefined} onClick={onChangeResolution(option)}>{option}</Button>
+                        <Button key={option} className={selectedResolution === option ? "active" : ""} onClick={onChangeResolution(option)}>{option}</Button>
                     ))
                 }
             </ButtonGroup>
