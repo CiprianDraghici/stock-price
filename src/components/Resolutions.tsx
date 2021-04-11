@@ -20,7 +20,7 @@ const Resolutions: React.FC<ResolutionsProps> = (props) => {
     }
 
     return (
-        <ControlLabel text={"Resolution"}>
+        <ControlLabel text={"Resolution"} useContainer={true}>
             <ButtonGroup size="small" aria-label="small outlined button group" aria-labelledby={"Resolution"}>
                 {
                     resolutionOptions.map(option => (

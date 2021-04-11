@@ -4,6 +4,7 @@ import VirtualizedSelect from "react-virtualized-select";
 // @ts-ignore
 import createfilteroptions from "react-select-fast-filter-options";
 import {Option, Options} from "react-select";
+import ControlLabel from "./panel/ControlLabel";
 
 interface StockSymbolProps {
     handleSymbolChange: (value: string) => void;
@@ -44,7 +45,9 @@ const StockSymbol: React.FC<StockSymbolProps> = (props) => {
     }
 
     return (
-        <VirtualizedSelect options={symbolOptions} filterOptions={createfilteroptions({options: symbolOptions})} value={selectedSymbol} onChange={onChangeSymbol} clearable={false} placeholder="Select a symbol" />
+        <ControlLabel text={"Symbol"} useContainer={false}>
+            <VirtualizedSelect options={symbolOptions} filterOptions={createfilteroptions({options: symbolOptions})} value={selectedSymbol} onChange={onChangeSymbol} clearable={false} placeholder="Select a symbol" />
+        </ControlLabel>
     )
 }
 
