@@ -18,6 +18,7 @@ import {Box} from "@material-ui/core";
 import MaximizeIcon from '@material-ui/icons/Maximize';
 import MinimizeIcon from '@material-ui/icons/Minimize';
 import RemoveIcon from '@material-ui/icons/Remove';
+import moment from "moment";
 
 const StockPriceDashboard: React.FC = (props) => {
     const chartService: ChartService = new ChartService();
@@ -69,11 +70,10 @@ const StockPriceDashboard: React.FC = (props) => {
     const getDataAsync = async (settings?: StockSettings) => {
         if(!settings || !settings.symbol) { return; }
 
-        const chartService: ChartService = new ChartService();
         try {
             setIsLoading(true);
-            const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, "1572651390", "1575243390");
-            // const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, moment(settings.dateRange?.startDate).unix().toString(), moment(settings.dateRange?.endDate).unix().toString());
+            // const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, "1572651390", "1575243390");
+            const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, moment(settings.dateRange?.startDate).unix().toString(), moment(settings.dateRange?.endDate).unix().toString());
             console.log(data);
             setIsLoading(false);
             setStockData(data as StockCandle);

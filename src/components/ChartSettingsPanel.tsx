@@ -48,8 +48,8 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
     const [selectedSymbol, setSelectedSymbol] = useState<string>("IBM");
     const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
-        startDate: new Date(),
-        endDate: new Date()
+        startDate: new Date(1572651390 * 1000),
+        endDate: new Date(1575243390 * 1000)
     });
 
     useEffect(() => {
