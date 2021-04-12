@@ -1,12 +1,21 @@
 import {HttpService} from "./http.service";
 import {ChartServiceContract} from "../contracts/chart-service.contract";
 import {StockCandle} from "../models/stock-candle.model";
-import {SecurityService} from "./security.service";
 import {Resolution} from "../enums/resolution.enum";
 import {StockSymbol} from "../models/stock-symbol.model";
 import {SeriesPoint} from "../models/series-point.model";
 
 export class ChartService implements ChartServiceContract {
+    private static instance: ChartService;
+
+    public static getInstance(): ChartService {
+        if (!ChartService.instance) {
+            ChartService.instance = new ChartService();
+        }
+
+        return ChartService.instance;
+    }
+
     public async getSymbols(): Promise<StockSymbol[] | null> {
         const httpService: HttpService = HttpService.getInstance();
 
@@ -27,12 +36,9 @@ export class ChartService implements ChartServiceContract {
 
     public async getData(symbol: string, resolution: Resolution, from: string, to: string): Promise<StockCandle | undefined> {
         const httpService: HttpService = HttpService.getInstance();
-        const securityService: SecurityService = new SecurityService();
-
-        const token = securityService.getToken();
 
         try {
-            const response = await httpService.get<StockCandle>(`${httpService.baseUrl}/stock/candle?symbol=${symbol}&resolution=${resolution}&from=${from}&to=${to}&token=${token}`);
+            const response = await httpService.get<StockCandle>(`${httpService.baseUrl}/stock/candle?symbol=${symbol}&resolution=${resolution}&from=${from}&to=${to}&token=${sessionStorage.accessToken}`);
 
             if (response.status !== 200) {
                 httpService.handleRejection(response);
@@ -45,8 +51,8 @@ export class ChartService implements ChartServiceContract {
     }
 
     public buildDataPoints(model: StockCandle, customProps?: object) {
-        const dataPoints: SeriesPoint[] = [...model.c.reduce((acc, curr, idx) => {
-                const x = new Date(model.t[idx]*1000); // moment(moment.unix(model.t[idx]).format("MM/DD/YYYY")).toDate();
+        return [...model.c.reduce((acc, curr, idx) => {
+                const x = new Date(model.t[idx]*1000);
                 acc.push({
                     x,
                     y: curr,
@@ -55,7 +61,5 @@ export class ChartService implements ChartServiceContract {
                 return acc;
             }, [] as SeriesPoint[])
         ];
-
-        return dataPoints;
     }
 }

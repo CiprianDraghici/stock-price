@@ -8,8 +8,8 @@ import StockSymbol from "./StockSymbol";
 import TimeRange from "./TimeRange";
 import {StockSettings} from "../models/stock.settings";
 import {makeStyles, Theme} from "@material-ui/core/styles";
-import SendIcon from '@material-ui/icons/Send';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import SendIcon from "@material-ui/icons/Send";
+import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartSettingsPanelProps {

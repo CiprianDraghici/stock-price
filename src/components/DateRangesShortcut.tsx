@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import {Resolution} from "../enums/resolution.enum";
 import {Button, ButtonGroup} from "@material-ui/core";
-import ControlLabel from "./panel/ControlLabel";
 import {DateRanges} from "../enums/date-ranges.enum";
 import {DateRangeService} from "../services/date-range.service";
 import {DateRange} from "../models/date-range.model";

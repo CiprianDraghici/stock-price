@@ -11,14 +11,11 @@ const Tooltip: React.FC<{
     const Content = props.content;
 
     return (
-        <>
-            {
-                props.show &&
-                <div className="custom-tooltip" style={{position: "absolute", left: props.position.x, top: props.position.y}}>
-                    <Content />
-                </div>
-            }
-        </>
+        props.show ?
+        <div className="custom-tooltip" style={{position: "absolute", left: props.position.x, top: props.position.y}}>
+            <Content />
+        </div> :
+        <></>
     )
 }
 

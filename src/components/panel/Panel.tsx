@@ -1,5 +1,5 @@
-import React from 'react';
-import {Card, CardContent, CardHeader, createStyles, makeStyles, Theme} from '@material-ui/core';
+import React from "react";
+import {Card, CardContent, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
 
 interface PanelProps {
     headerComponent?: React.ReactElement | React.ElementType;

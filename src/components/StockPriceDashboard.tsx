@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import ReactDOM from "react-dom";
 import Chart from "./Chart";
 import {ChartService} from "../services/chart.service";
 import {StockCandle} from "../models/stock-candle.model";
@@ -11,17 +12,16 @@ import {DateRanges} from "../enums/date-ranges.enum";
 import ChartSettingsPanel from "./ChartSettingsPanel";
 import {StockSettings} from "../models/stock.settings";
 import LoadingIndicator from "./LoadingIndicator";
-import ReactDOM from "react-dom";
 import {ChartSettingsService} from "../services/chart-settings.service";
 import ToggleButton from "./ToggleButton";
 import {Box} from "@material-ui/core";
-import MaximizeIcon from '@material-ui/icons/Maximize';
-import MinimizeIcon from '@material-ui/icons/Minimize';
-import RemoveIcon from '@material-ui/icons/Remove';
+import MaximizeIcon from "@material-ui/icons/Maximize";
+import MinimizeIcon from "@material-ui/icons/Minimize";
+import RemoveIcon from "@material-ui/icons/Remove";
 import moment from "moment";
 
 const StockPriceDashboard: React.FC = (props) => {
-    const chartService: ChartService = new ChartService();
+    const chartService: ChartService = ChartService.getInstance();
     const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
 
     const emptyChartData = {
@@ -31,7 +31,6 @@ const StockPriceDashboard: React.FC = (props) => {
 
     const [stockData, setStockData] = useState<StockCandle | null>(null);
     const [chartData, setChartData] = useState<Series>(emptyChartData);
-
     const [selectedDateRangeShortcut, setSelectedDateRangeShortcut] = useState<DateRanges>(DateRanges.CurrentDay);
     const [showAverage, setShowAverage] = useState<boolean>(false);
     const [showMin, setShowMin] = useState<boolean>(false);
@@ -72,7 +71,6 @@ const StockPriceDashboard: React.FC = (props) => {
 
         try {
             setIsLoading(true);
-            // const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, "1572651390", "1575243390");
             const data = await chartService.getData(settings.symbol, settings.resolution || Resolution.M, moment(settings.dateRange?.startDate).unix().toString(), moment(settings.dateRange?.endDate).unix().toString());
             console.log(data);
             setIsLoading(false);
@@ -118,11 +116,6 @@ const StockPriceDashboard: React.FC = (props) => {
                         !error &&
                         <>
                             <Chart data={chartData} showMin={showMin} showAverage={showAverage} showMax={showMax} />
-                            {
-                                isLoading &&
-                                ReactDOM.createPortal(<LoadingIndicator />, getLoadingIndicatorContainer()!)
-                            }
-
                             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
                                 <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
                                 <div style={{marginLeft: 20}}>
@@ -131,6 +124,10 @@ const StockPriceDashboard: React.FC = (props) => {
                                     <ToggleButton label={"Max"} value={showMax} handleShowStateChange={onShowMaxChange}><MaximizeIcon/> </ToggleButton>
                                 </div>
                             </Box>
+                            {
+                                isLoading &&
+                                ReactDOM.createPortal(<LoadingIndicator />, getLoadingIndicatorContainer()!)
+                            }
                         </>
                     }
                 </>

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button} from "@material-ui/core";
 
-
 interface StockPriceToolbarProps {
     label: string;
     value?: boolean;
@@ -22,12 +21,8 @@ const ToggleButton: React.FC<StockPriceToolbarProps> = (props) => {
 
     return (
         <Button size={"small"} className={`margin-l-sm ${showState ? "active" : ""}`} onClick={onShowAverageChange}>
-            {
-                props.label
-            }
-            {
-                props.children
-            }
+            { props.label }
+            { props.children }
         </Button>)
 }
 

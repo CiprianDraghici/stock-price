@@ -2,59 +2,18 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
 button.active {
   background: #13939a;
 }
 
 .MuiButton-root.MuiButton-outlined:hover,
 button:hover {
-  /*background-color: lightskyblue !important;*/
   background-color: #d4d4d5 !important;
 }
 
 .MuiButtonGroup-grouped {
   min-width: 59px !important;
 }
-
-/*.MuiIconButton-root {*/
-/*  color: #28a745 !important;*/
-/*}*/
 
 .MuiIconButton-root.settings-button {
   -webkit-animation: glowing 1500ms infinite;
@@ -65,24 +24,20 @@ button:hover {
 
 @-webkit-keyframes glowing {
   0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
-  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
   100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
 }
 
 @-moz-keyframes glowing {
   0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
-  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
   100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
 }
 
 @-o-keyframes glowing {
   0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
-  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
   100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
 }
 
 @keyframes glowing {
   0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
-  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
   100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
 }

@@ -1,13 +1,13 @@
-import React from 'react';
-import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import SettingsIcon from '@material-ui/icons/Settings';
+import React from "react";
+import clsx from "clsx";
+import { createStyles, makeStyles, useTheme, Theme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import {AppBar, IconButton, Toolbar, Typography} from "@material-ui/core";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const drawerWidth = 500;
 
@@ -108,7 +108,7 @@ export const Shell: React.FC<ShellProps> = (props) => {
                     >
                         <SettingsIcon className={"settings-button"} />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography variant="h6" noWrap={true}>
                         Stock Price
                     </Typography>
                 </Toolbar>
@@ -133,12 +133,6 @@ export const Shell: React.FC<ShellProps> = (props) => {
                 }
                 <Divider />
             </Drawer>
-            {/*<main*/}
-            {/*    className={clsx(classes.content, {*/}
-            {/*        [classes.contentShift]: open,*/}
-            {/*    })}*/}
-            {/*>*/}
-            {/*</main>*/}
             <main className={classes.content}>
                 <div id={"LoadingIndicatorContainer"}/>
                 {

@@ -95,6 +95,23 @@ const XYChart: React.FC<XYChartProps> = (props) => {
         return items;
     }
 
+    const getLine = (series: Series) => {
+        return <LineSeries
+            data={series?.values as any[]}
+            style={{
+                strokeWidth: '1px'
+            }}
+            strokeStyle={"dashed"}
+            color={"grey"}
+        />
+    }
+
+    const getLabel = (series: Series, text: string) => {
+        return <LabelSeries allowOffsetToBeReversed={true} data={[{
+            ...series?.values[0],
+            label: `${text} = ${Number(series?.values[0].y).toFixed(2)}`
+        }] as any[]}/>
+    }
 
     useEffect(() => {
         computeMinSeries();
@@ -155,9 +172,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                 <>
                     <FlexibleXYPlot
                         xType="time"
-                        // width={1000}
                         height={600}
-                        // style={{position: "absolute"}}
                         onClick={onClick}
                         onMouseLeave={onMouseLeave}
                         style={{marginTop: "5em"}}
@@ -173,68 +188,35 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                             onValueClick={onValueClick}
                             onValueMouseOut={onValueMouseOut}
                             onNearestX={onNearestXY}
-                            // style={{
-                            //     strokeWidth: '3px'
-                            // }}
                             lineStyle={{stroke: '#007bff'}}
                             markStyle={{fill: '#007bff'}}
                         />
 
                         {
-                            props.showMin &&
-                            <LineSeries
-                                data={minSeries?.values as any[]}
-                                style={{
-                                    strokeWidth: '1px'
-                                }}
-                                strokeStyle={"dashed"}
-                                color={"grey"}
-                            />
+                            props.showMin && minSeries &&
+                            getLine(minSeries)
                         }
                         {
-                            (props.showMin && props.data.values.length > 1) &&
-                            <LabelSeries allowOffsetToBeReversed={true} data={[{
-                                ...minSeries?.values[0],
-                                label: `MIN = ${Number(minSeries?.values[0].y).toFixed(2)}`
-                            }] as any[]}/>
+                            (props.showMin && minSeries && props.data.values.length > 1) &&
+                            getLabel(minSeries, "MIN")
                         }
 
                         {
-                            props.showAverage &&
-                            <LineSeries
-                                data={averageSeries?.values as any[]}
-                                style={{
-                                    strokeWidth: '1px'
-                                }}
-                                strokeStyle={"dashed"}
-                                color={"grey"}
-                            />
+                            props.showAverage && averageSeries &&
+                            getLine(averageSeries)
                         }
                         {
-                            (props.showAverage && props.data.values.length > 1) &&
-                            <LabelSeries allowOffsetToBeReversed={true} data={[{
-                                ...averageSeries?.values[0],
-                                label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
-                            }] as any[]}/>
+                            (props.showAverage && averageSeries && props.data.values.length > 1) &&
+                            getLabel(averageSeries, "AVG")
                         }
 
                         {
-                            props.showMax &&
-                            <LineSeries
-                                data={maxSeries?.values as any[]}
-                                style={{
-                                    strokeWidth: '1px'
-                                }}
-                                strokeStyle={"dashed"}
-                                color={"grey"}
-                            />
+                            props.showMax && maxSeries &&
+                            getLine(maxSeries)
                         }
                         {
-                            (props.showMax && props.data.values.length > 1) &&
-                            <LabelSeries allowOffsetToBeReversed={true} data={[{
-                                ...maxSeries?.values[0],
-                                label: `MAX = ${Number(maxSeries?.values[0].y).toFixed(2)}`
-                            }] as any[]}/>
+                            (props.showMax && maxSeries && props.data.values.length > 1) &&
+                            getLabel(maxSeries, "MAX")
                         }
 
                         <Crosshair values={crossHairValues}>

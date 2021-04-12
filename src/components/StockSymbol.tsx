@@ -4,7 +4,7 @@ import VirtualizedSelect from "react-virtualized-select";
 // @ts-ignore
 import createfilteroptions from "react-select-fast-filter-options";
 import {Option} from "react-select";
-import ControlLabel from "./panel/ControlLabel";
+import ControlLabel from "./ControlLabel";
 
 interface StockSymbolProps {
     symbol?: string;

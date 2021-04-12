@@ -3,7 +3,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker
-} from '@material-ui/pickers';
+} from "@material-ui/pickers";
 import {DateRange} from "../models/date-range.model";
 import {Grid} from "@material-ui/core";
 import {useDateRange} from "../custom-hooks/date-range.hook";

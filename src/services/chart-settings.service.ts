@@ -14,24 +14,8 @@ export class ChartSettingsService {
 
     public setSpecificProperty(property: keyof StockSettings, value: StockSettings[keyof StockSettings]) {
         // @ts-ignore
-        this.settings[property] = value;
+        this.settings[property as keyof StockSettings] = value;
     };
-
-    // public setSymbol(value: string) {
-    //     this.settings.symbol = value;
-    // };
-    //
-    // public setShowAverage(value: boolean) {
-    //     this.settings.showAverage = value;
-    // };
-    //
-    // public setResolution(value: Resolution) {
-    //     this.settings.resolution = value;
-    // };
-    //
-    // public setDateRange(value: DateRange) {
-    //     this.settings.dateRange = value;
-    // };
 
     public setSettings(settings: StockSettings) {
         this.settings = {...this.settings, ...settings};
