@@ -51,6 +51,11 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         onApplySettings();
     }, []);
 
+    useEffect(() => {
+        const settings: StockSettings = chartSettings.getSettings();
+        props.handleApplySettings({...settings});
+    }, [selectedSymbol]);
+
     const onSymbolChange = (value: string) => {
         setSelectedSymbol(value);
     }

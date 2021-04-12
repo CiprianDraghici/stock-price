@@ -7,7 +7,7 @@ import {
     LineMarkSeries,
     FlexibleXYPlot,
     LineSeries,
-    LabelSeries
+    LabelSeries, DiscreteColorLegend
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
@@ -40,6 +40,20 @@ const XYChart: React.FC<XYChartProps> = (props) => {
             values: fillValues
         });
     }
+
+    const getLegend = () => {
+        const items = [];
+
+        if(props.data.name) {
+            items.push({
+                title: props.data.name,
+                color: "#12939a"
+            })
+        }
+
+        return items;
+    }
+
 
     useEffect(() => {
         computeAverageSeries();
@@ -99,7 +113,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                     // style={{
                     //     strokeWidth: '3px'
                     // }}
-                    // lineStyle={{stroke: 'red'}}
+                    lineStyle={{stroke: '#007bff'}}
                     // markStyle={{stroke: 'blue'}}
                 />
 
@@ -122,6 +136,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                     }] as any[]}/>
                 }
             </FlexibleXYPlot>
+            <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
             {props.children}
         </div>
     )

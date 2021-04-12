@@ -4,6 +4,8 @@ import XYChart from "./XYChart";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
 import moment from "moment";
+import {Card, CardContent, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
+import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartProps {
     data: Series;
@@ -17,6 +19,8 @@ interface TooltipPosition {
 }
 
 const Chart: React.FC<ChartProps> = (props) => {
+    const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
+
     const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition | null>( null);
 
     const onValueMouseOver = (datapoint: any, targetElement: SVGGraphicsElement) => {
@@ -36,10 +40,21 @@ const Chart: React.FC<ChartProps> = (props) => {
             return <></>;
         }
 
+        const classes = makeStyles((theme: Theme) =>
+            createStyles({
+                fullHeightCard: {
+                    height: "50px",
+                },
+            }),
+        )();
+
         return (
             <div data-testid={"tooltip-content"}>
-                <div style={{textAlign: "left"}}>{`Date: ${moment(tooltipPosition!.datapoint.x).format("MM/DD/YYYY")}`}</div>
-                <div style={{textAlign: "left"}}>{`Value: ${tooltipPosition!.datapoint.y}`}</div>
+                <div className={"chart-tooltip-header"}>{`${moment(tooltipPosition!.datapoint.x).format("MM/DD/YYYY")}`}</div>
+                <div className={"chart-tooltip-content"}>
+                    <div className={"symbol"}>{chartSettings.getSettings().symbol}</div>
+                    <div className={"symbolValue"}>{tooltipPosition!.datapoint.y}</div>
+                </div>
             </div>
         );
     }
