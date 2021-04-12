@@ -15,7 +15,9 @@ import EmptyChart from "./EmptyChart";
 
 interface XYChartProps {
     data: Series;
+    showMin?: boolean;
     showAverage?: boolean;
+    showMax?: boolean;
 
     handleValueMouseOver?: (dataPoint: SeriesPoint, e: React.MouseEvent<HTMLElement>) => void;
     handleValueMouseOut?: (e: any) => void;
@@ -23,22 +25,59 @@ interface XYChartProps {
 }
 
 const XYChart: React.FC<XYChartProps> = (props) => {
+    const [minSeries, setMinSeries] = useState<Series | null>();
     const [averageSeries, setAverageSeries] = useState<Series | null>();
+    const [maxSeries, setMaxSeries] = useState<Series | null>();
     const [crossHairValues, setCrossHairValues] = useState<LineMarkSeriesPoint[]>([]);
+
+    const getMinValue = () => {
+        return props.data.values.reduce((acc, d) => {
+            const currentValue = Number(d.y);
+            return currentValue < acc ? currentValue : acc;
+        }, Infinity);
+    }
 
     const getAverageValue = () => {
         return props.data.values.reduce((acc, d) => acc + Number(d.y), 0) / props.data.values.length;
     }
 
+    const getMaxValue = () => {
+        return props.data.values.reduce((acc, d) => {
+            const currentValue = Number(d.y);
+            return currentValue > acc ? currentValue : acc;
+        }, -Infinity);
+    }
+
+    const fillSeries = (value: number) => {
+        return props.data.values.map(x => ({
+            ...x,
+            y: value
+        }));
+    }
+
+    const computeMinSeries = () => {
+        const minValue = getMinValue();
+        const fillValues = fillSeries(minValue);
+        setMinSeries({
+            name: "Min",
+            values: fillValues
+        });
+    }
+
     const computeAverageSeries = () => {
         const avgValue = getAverageValue();
-        const fillValues = props.data.values.map(x => ({
-            ...x,
-            y: avgValue
-        }));
-
+        const fillValues = fillSeries(avgValue);
         setAverageSeries({
             name: "Average",
+            values: fillValues
+        });
+    }
+
+    const computeMaxSeries = () => {
+        const maxValue = getMaxValue();
+        const fillValues = fillSeries(maxValue);
+        setMaxSeries({
+            name: "Max",
             values: fillValues
         });
     }
@@ -58,11 +97,15 @@ const XYChart: React.FC<XYChartProps> = (props) => {
 
 
     useEffect(() => {
+        computeMinSeries();
         computeAverageSeries();
+        computeMaxSeries();
     }, []);
 
     useEffect(() => {
+        computeMinSeries();
         computeAverageSeries();
+        computeMaxSeries();
     }, [props.data]);
 
     const onValueClick = (datapoint: SeriesPoint, e: any) => {
@@ -138,6 +181,25 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                         />
 
                         {
+                            props.showMin &&
+                            <LineSeries
+                                data={minSeries?.values as any[]}
+                                style={{
+                                    strokeWidth: '1px'
+                                }}
+                                strokeStyle={"dashed"}
+                                color={"grey"}
+                            />
+                        }
+                        {
+                            (props.showMin && props.data.values.length > 1) &&
+                            <LabelSeries allowOffsetToBeReversed={true} data={[{
+                                ...minSeries?.values[0],
+                                label: `MIN = ${Number(minSeries?.values[0].y).toFixed(2)}`
+                            }] as any[]}/>
+                        }
+
+                        {
                             props.showAverage &&
                             <LineSeries
                                 data={averageSeries?.values as any[]}
@@ -153,6 +215,25 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                             <LabelSeries allowOffsetToBeReversed={true} data={[{
                                 ...averageSeries?.values[0],
                                 label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
+                            }] as any[]}/>
+                        }
+
+                        {
+                            props.showMax &&
+                            <LineSeries
+                                data={maxSeries?.values as any[]}
+                                style={{
+                                    strokeWidth: '1px'
+                                }}
+                                strokeStyle={"dashed"}
+                                color={"grey"}
+                            />
+                        }
+                        {
+                            (props.showMax && props.data.values.length > 1) &&
+                            <LabelSeries allowOffsetToBeReversed={true} data={[{
+                                ...maxSeries?.values[0],
+                                label: `MAX = ${Number(maxSeries?.values[0].y).toFixed(2)}`
                             }] as any[]}/>
                         }
 

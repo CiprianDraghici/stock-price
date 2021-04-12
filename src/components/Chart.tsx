@@ -8,7 +8,9 @@ import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartProps {
     data: Series;
+    showMin?: boolean;
     showAverage?: boolean;
+    showMax?: boolean;
 }
 
 interface TooltipPosition {
@@ -29,7 +31,6 @@ const Chart: React.FC<ChartProps> = (props) => {
             datapoint
         });
     }
-
 
     const onValueMouseOut = (e: any) => {
         setTooltipPosition(null);
@@ -53,7 +54,7 @@ const Chart: React.FC<ChartProps> = (props) => {
 
     return (
         <div data-testid={"Chart"}>
-            <XYChart data={props.data} showAverage={props.showAverage} handleValueMouseOver={onValueMouseOver} handleValueMouseOut={onValueMouseOut}>
+            <XYChart {...props} handleValueMouseOver={onValueMouseOver} handleValueMouseOut={onValueMouseOut}>
                 <Tooltip show={!!tooltipPosition} position={{...tooltipPosition!}} content={TooltipContent} />
             </XYChart>
         </div>

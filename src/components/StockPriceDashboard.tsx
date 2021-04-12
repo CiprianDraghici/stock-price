@@ -13,6 +13,11 @@ import {StockSettings} from "../models/stock.settings";
 import LoadingIndicator from "./LoadingIndicator";
 import ReactDOM from "react-dom";
 import {ChartSettingsService} from "../services/chart-settings.service";
+import ToggleButton from "./ToggleButton";
+import {Box} from "@material-ui/core";
+import MaximizeIcon from '@material-ui/icons/Maximize';
+import MinimizeIcon from '@material-ui/icons/Minimize';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const StockPriceDashboard: React.FC = (props) => {
     const chartService: ChartService = new ChartService();
@@ -27,6 +32,9 @@ const StockPriceDashboard: React.FC = (props) => {
     const [chartData, setChartData] = useState<Series>(emptyChartData);
 
     const [selectedDateRangeShortcut, setSelectedDateRangeShortcut] = useState<DateRanges>(DateRanges.CurrentDay);
+    const [showAverage, setShowAverage] = useState<boolean>(false);
+    const [showMin, setShowMin] = useState<boolean>(false);
+    const [showMax, setShowMax] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -84,6 +92,18 @@ const StockPriceDashboard: React.FC = (props) => {
         onApplySettings(chartSettings.getSettings());
     }
 
+    const onShowAverageChange = (value: boolean) => {
+        setShowAverage(value);
+    }
+
+    const onShowMinChange = (value: boolean) => {
+        setShowMin(value);
+    }
+
+    const onShowMaxChange = (value: boolean) => {
+        setShowMax(value);
+    }
+
     const getLoadingIndicatorContainer = () => {
         return document.getElementById("LoadingIndicatorContainer");
     }
@@ -97,12 +117,20 @@ const StockPriceDashboard: React.FC = (props) => {
                     {
                         !error &&
                         <>
-                            <Chart data={chartData} showAverage={chartSettings.getSettings()?.showAverage} />
+                            <Chart data={chartData} showMin={showMin} showAverage={showAverage} showMax={showMax} />
                             {
                                 isLoading &&
                                 ReactDOM.createPortal(<LoadingIndicator />, getLoadingIndicatorContainer()!)
                             }
-                            <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
+
+                            <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="center" alignItems="flex-start" alignContent="flex-start">
+                                <DateRangesShortcut selectedDateRange={selectedDateRangeShortcut} handleDateRangeChange={onDateRangeShortcutChange} />
+                                <div style={{marginLeft: 20}}>
+                                    <ToggleButton label={"Min"} value={showMin} handleShowStateChange={onShowMinChange}> <MinimizeIcon/> </ToggleButton>
+                                    <ToggleButton label={"Average"} value={showAverage} handleShowStateChange={onShowAverageChange}> <RemoveIcon/> </ToggleButton>
+                                    <ToggleButton label={"Max"} value={showMax} handleShowStateChange={onShowMaxChange}><MaximizeIcon/> </ToggleButton>
+                                </div>
+                            </Box>
                         </>
                     }
                 </>

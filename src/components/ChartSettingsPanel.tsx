@@ -4,7 +4,6 @@ import {DateRange} from "../models/date-range.model";
 import Resolutions from "./Resolutions";
 import {Box, Button, createStyles} from "@material-ui/core";
 import Panel from "./panel/Panel";
-import ToggleButton from "./ToggleButton";
 import StockSymbol from "./StockSymbol";
 import TimeRange from "./TimeRange";
 import {StockSettings} from "../models/stock.settings";
@@ -52,7 +51,6 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         startDate: new Date(),
         endDate: new Date()
     });
-    const [showAverage, setShowAverage] = useState<boolean>(false);
 
     useEffect(() => {
         onApplySettings();
@@ -70,16 +68,11 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         setSelectedDateRange(value);
     }
 
-    const onShowAverageChange = (value: boolean) => {
-        setShowAverage(value);
-    }
-
     const onApplySettings = () => {
         const settings: StockSettings = {
             symbol: selectedSymbol || "",
             resolution: selectedResolution,
-            dateRange: selectedDateRange,
-            showAverage
+            dateRange: selectedDateRange
         };
 
         chartSettings.setSettings(settings);
@@ -92,35 +85,23 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         setSelectedSymbol(settings.symbol || selectedSymbol);
         setSelectedResolution(settings.resolution || selectedResolution);
         setSelectedDateRange(settings.dateRange || selectedDateRange);
-        setShowAverage(settings.showAverage !== null && settings.showAverage !== undefined ? settings.showAverage : showAverage);
     }
 
     return (
         <Panel>
-            <StockSymbol symbol={selectedSymbol} handleSymbolChange={onSymbolChange} />
-            <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                <ToggleButton label={"Show average"} value={showAverage} handleShowStateChange={onShowAverageChange} />
-            </Box>
+            <div style={{marginBottom: 10}}>
+                <StockSymbol symbol={selectedSymbol} handleSymbolChange={onSymbolChange} />
+            </div>
             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
                 <Resolutions resolution={selectedResolution} handleResolutionChange={onResolutionChange} />
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
                 <TimeRange dateRange={selectedDateRange} handlePeriodChange={onDateRangeChange} />
             </Box>
-            <Button
-                variant="contained"
-                className={classes.resetButton}
-                endIcon={<RotateLeftIcon/>}
-                onClick={onResetSettings}
-            >
+            <Button variant="contained" className={classes.resetButton} endIcon={<RotateLeftIcon/>} onClick={onResetSettings}>
                 Reset
             </Button>
-            <Button
-                variant="contained"
-                className={classes.applyButton}
-                endIcon={<SendIcon/>}
-                onClick={onApplySettings}
-            >
+            <Button variant="contained" className={classes.applyButton} endIcon={<SendIcon/>} onClick={onApplySettings}>
                 Apply
             </Button>
         </Panel>

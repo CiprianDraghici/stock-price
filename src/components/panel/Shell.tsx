@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-const drawerWidth = 600;
+const drawerWidth = 560;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

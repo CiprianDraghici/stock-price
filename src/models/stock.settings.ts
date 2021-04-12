@@ -5,5 +5,4 @@ export interface StockSettings {
     symbol: string;
     resolution: Resolution;
     dateRange: DateRange;
-    showAverage: boolean;
 }
