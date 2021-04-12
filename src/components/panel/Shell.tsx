@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-const drawerWidth = 560;
+const drawerWidth = 500;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -109,7 +109,7 @@ export const Shell: React.FC<ShellProps> = (props) => {
                         <SettingsIcon className={"settings-button"} />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Stock price application
+                        Stock Price
                     </Typography>
                 </Toolbar>
             </AppBar>

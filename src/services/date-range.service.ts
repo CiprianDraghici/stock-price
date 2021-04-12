@@ -68,41 +68,4 @@ export class DateRangeService {
             [DateRanges.LastYear]: "Last Year"
         }
     }
-
-    // public getDateRangesOptions = () => {
-    //     return [
-    //         {
-    //             label: "Current Day",
-    //             value: DateRanges.CurrentDay
-    //         },
-    //         {
-    //             label: "Current Week",
-    //             value: DateRanges.CurrentWeek
-    //         },
-    //         {
-    //             label: "Current Month",
-    //             value: DateRanges.CurrentMonth
-    //         },
-    //         {
-    //             label: "Current Year",
-    //             value: DateRanges.CurrentYear
-    //         },
-    //         {
-    //             label: "Last Day",
-    //             value: DateRanges.LastDay
-    //         },
-    //         {
-    //             label: "Last Week",
-    //             value: DateRanges.LastWeek
-    //         },
-    //         {
-    //             label: "Last Month",
-    //             value: DateRanges.LastMonth
-    //         },
-    //         {
-    //             label: "Last Year",
-    //             value: DateRanges.LastYear
-    //         }
-    //     ]
-    // }
 }

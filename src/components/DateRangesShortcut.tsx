@@ -17,11 +17,11 @@ const DateRangesShortcut: React.FC<DateRangesShortcutProps> = (props) => {
 
     const [selectedDateRange, setSelectedDateRange] = useState<string>(dateRangeOptions[props.selectedDateRange || DateRanges.CurrentDay]);
 
-    const onChangeResolution = (resolutionOption: string) => (e: React.MouseEvent) => {
+    const onChangeDateRanges = (dateRangeOption: string) => (e: React.MouseEvent) => {
         // @ts-ignore
-        setSelectedDateRange(dateRangeOptions[resolutionOption]);
-        const dateRange = dateRangeService.resolveDateRange((Number(resolutionOption) as unknown) as DateRanges);
-        props.handleDateRangeChange((Number(resolutionOption) as unknown) as DateRanges, dateRange);
+        setSelectedDateRange(dateRangeOptions[dateRangeOption]);
+        const dateRange = dateRangeService.resolveDateRange((Number(dateRangeOption) as unknown) as DateRanges);
+        props.handleDateRangeChange((Number(dateRangeOption) as unknown) as DateRanges, dateRange);
     }
 
     return (
@@ -29,7 +29,7 @@ const DateRangesShortcut: React.FC<DateRangesShortcutProps> = (props) => {
             {
                 Object.keys(dateRangeOptions).map(option => (
                     // @ts-ignore
-                    <Button key={option} className={selectedDateRange === dateRangeOptions[option] ? "active" : ""} onClick={onChangeResolution(option)}>{dateRangeOptions[option]}</Button>
+                    <Button key={option} className={selectedDateRange === dateRangeOptions[option] ? "active" : ""} onClick={onChangeDateRanges(option)}>{dateRangeOptions[option]}</Button>
                 ))
             }
         </ButtonGroup>

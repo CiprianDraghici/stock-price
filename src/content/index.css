@@ -72,3 +72,23 @@ code {
   border-width: 1px 1px 1px 0;
   width: 40%;
 }
+
+.margin-sm {
+  margin: 5px !important;
+}
+
+.margin-l-sm {
+  margin-left: 5px !important;
+}
+
+.margin-r-sm {
+  margin-right: 5px !important;
+}
+
+.margin-t-sm {
+  margin-top: 5px !important;
+}
+
+.margin-b-sm {
+  margin-bottom: 5px !important;
+}

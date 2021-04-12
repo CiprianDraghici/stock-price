@@ -21,7 +21,7 @@ const ToggleButton: React.FC<StockPriceToolbarProps> = (props) => {
     };
 
     return (
-        <Button size={"small"} className={showState ? "active" : ""} onClick={onShowAverageChange}>
+        <Button size={"small"} className={`margin-l-sm ${showState ? "active" : ""}`} onClick={onShowAverageChange}>
             {
                 props.label
             }
