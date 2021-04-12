@@ -48,6 +48,37 @@ button:hover {
   background-color: #d4d4d5 !important;
 }
 
-.MuiIconButton-root {
-  color: #28a745 !important;
+/*.MuiIconButton-root {*/
+/*  color: #28a745 !important;*/
+/*}*/
+
+.MuiIconButton-root.settings-button {
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}
+
+@-webkit-keyframes glowing {
+  0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
+  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
+  100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
+  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
+  100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
+  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
+  100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
+}
+
+@keyframes glowing {
+  0% { background-color: #68d7dd; -webkit-box-shadow: 0 0 3px #68d7dd; }
+  /*50% { background-color: #24dfe9; -webkit-box-shadow: 0 0 40px #24dfe9; }*/
+  100% { background-color: #13939a; -webkit-box-shadow: 0 0 3px #13939a; }
 }

@@ -104,9 +104,9 @@ export const Shell: React.FC<ShellProps> = (props) => {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
+                        className={`${clsx(classes.menuButton, open && classes.hide)} settings-button`}
                     >
-                        <SettingsIcon />
+                        <SettingsIcon className={"settings-button"} />
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Stock price application

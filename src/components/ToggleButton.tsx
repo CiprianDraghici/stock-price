@@ -24,7 +24,7 @@ const ToggleButton: React.FC<StockPriceToolbarProps> = (props) => {
 
     const GreenCheckbox = withStyles({
         root: {
-            color: green[400],
+            // color: green[400],
             '&$checked': {
                 color: green[600],
             },
