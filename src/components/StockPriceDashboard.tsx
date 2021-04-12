@@ -81,6 +81,7 @@ const StockPriceDashboard: React.FC = (props) => {
     const onDateRangeShortcutChange = (selectedDateRange: DateRanges, value: DateRange) => {
         setSelectedDateRangeShortcut(selectedDateRange);
         chartSettings.setSpecificProperty("dateRange", value);
+        onApplySettings(chartSettings.getSettings());
     }
 
     const getLoadingIndicatorContainer = () => {
