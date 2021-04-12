@@ -140,6 +140,7 @@ export const Shell: React.FC<ShellProps> = (props) => {
             {/*>*/}
             {/*</main>*/}
             <main className={classes.content}>
+                <div id={"LoadingIndicatorContainer"}/>
                 {
                     props.contentComponent
                 }
