@@ -40,14 +40,6 @@ const Chart: React.FC<ChartProps> = (props) => {
             return <></>;
         }
 
-        const classes = makeStyles((theme: Theme) =>
-            createStyles({
-                fullHeightCard: {
-                    height: "50px",
-                },
-            }),
-        )();
-
         return (
             <div data-testid={"tooltip-content"}>
                 <div className={"chart-tooltip-header"}>{`${moment(tooltipPosition!.datapoint.x).format("MM/DD/YYYY")}`}</div>

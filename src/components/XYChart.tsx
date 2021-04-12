@@ -11,6 +11,7 @@ import {
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
+import EmptyChart from "./EmptyChart";
 
 interface XYChartProps {
     data: Series;
@@ -47,7 +48,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
         if(props.data.name) {
             items.push({
                 title: props.data.name,
-                color: "#12939a"
+                color: "#007bff"
             })
         }
 
@@ -91,53 +92,62 @@ const XYChart: React.FC<XYChartProps> = (props) => {
 
     return (
         <div data-testid={"XY-Chart"}>
-            <FlexibleXYPlot
-                xType="time"
-                // width={1000}
-                height={600}
-                // style={{position: "absolute"}}
-                onClick={onClick}
-                style={{marginTop: "5em"}}
-            >
-                <VerticalGridLines />
-                <HorizontalGridLines />
-                <XAxis />
-                <YAxis />
+            {
+                props.data.values.length === 0 &&
+                <EmptyChart />
+            }
+            {
+                props.data.values.length > 0 &&
+                <>
+                    <FlexibleXYPlot
+                        xType="time"
+                        // width={1000}
+                        height={600}
+                        // style={{position: "absolute"}}
+                        onClick={onClick}
+                        style={{marginTop: "5em"}}
+                    >
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <XAxis />
+                        <YAxis />
 
-                <LineMarkSeries
-                    className="mark-series-overrides"
-                    data={props.data.values}
-                    onValueClick={onValueClick}
-                    onValueMouseOver={onValueMouseOver}
-                    onValueMouseOut={onValueMouseOut}
-                    // style={{
-                    //     strokeWidth: '3px'
-                    // }}
-                    lineStyle={{stroke: '#007bff'}}
-                    // markStyle={{stroke: 'blue'}}
-                />
+                        <LineMarkSeries
+                            className="mark-series-overrides"
+                            data={props.data.values}
+                            onValueClick={onValueClick}
+                            onValueMouseOver={onValueMouseOver}
+                            onValueMouseOut={onValueMouseOut}
+                            // style={{
+                            //     strokeWidth: '3px'
+                            // }}
+                            lineStyle={{stroke: '#007bff'}}
+                            markStyle={{fill: '#007bff'}}
+                        />
 
-                {
-                    props.showAverage &&
-                    <LineSeries
-                        data={averageSeries?.values as any[]}
-                        style={{
-                            strokeWidth: '1px'
-                        }}
-                        strokeStyle={"dashed"}
-                        color={"grey"}
-                    />
-                }
-                {
-                    (props.showAverage && props.data.values.length > 1) &&
-                    <LabelSeries allowOffsetToBeReversed={true} data={[{
-                        ...averageSeries?.values[0],
-                        label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
-                    }] as any[]}/>
-                }
-            </FlexibleXYPlot>
-            <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
-            {props.children}
+                        {
+                            props.showAverage &&
+                            <LineSeries
+                                data={averageSeries?.values as any[]}
+                                style={{
+                                    strokeWidth: '1px'
+                                }}
+                                strokeStyle={"dashed"}
+                                color={"grey"}
+                            />
+                        }
+                        {
+                            (props.showAverage && props.data.values.length > 1) &&
+                            <LabelSeries allowOffsetToBeReversed={true} data={[{
+                                ...averageSeries?.values[0],
+                                label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
+                            }] as any[]}/>
+                        }
+                    </FlexibleXYPlot>
+                    <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
+                    {props.children}
+                </>
+            }
         </div>
     )
 }
