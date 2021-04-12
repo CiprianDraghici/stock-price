@@ -5,7 +5,6 @@ import VirtualizedSelect from "react-virtualized-select";
 import createfilteroptions from "react-select-fast-filter-options";
 import {Option} from "react-select";
 import ControlLabel from "./panel/ControlLabel";
-import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface StockSymbolProps {
     symbol?: string;
@@ -13,9 +12,10 @@ interface StockSymbolProps {
 }
 
 const StockSymbol: React.FC<StockSymbolProps> = (props) => {
-    const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
-
-    const [selectedSymbol, setSelectedSymbol] = useState<Option>();
+    const [selectedSymbol, setSelectedSymbol] = useState<Option>({
+        label: props.symbol,
+        value: props.symbol
+    });
     const [symbolOptions, setSymbolOptions] = useState<Option[]>([]);
 
     useEffect(() => {
@@ -43,10 +43,6 @@ const StockSymbol: React.FC<StockSymbolProps> = (props) => {
         }
 
         setSymbolOptions(dropdownOptions);
-        if(dropdownOptions.length > 0) {
-            onChangeSymbol(dropdownOptions[0]);
-            chartSettings.setSpecificProperty("symbol", dropdownOptions[0].value as string);
-        }
     }
 
     const onChangeSymbol = (option: Option | null) => {

@@ -46,7 +46,7 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
     const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
     const classes = useStyles();
 
-    const [selectedSymbol, setSelectedSymbol] = useState<string>();
+    const [selectedSymbol, setSelectedSymbol] = useState<string>("IBM");
     const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
         startDate: new Date(),
