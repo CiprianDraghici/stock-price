@@ -7,7 +7,7 @@ import {
     LineMarkSeries,
     FlexibleXYPlot,
     LineSeries,
-    LabelSeries, DiscreteColorLegend
+    LabelSeries, DiscreteColorLegend, Crosshair, LineMarkSeriesPoint
 } from "react-vis";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
@@ -17,13 +17,14 @@ interface XYChartProps {
     data: Series;
     showAverage?: boolean;
 
-    onValueMouseOverCallback?: (dataPoint: SeriesPoint, target: SVGGraphicsElement) => void;
-    onValueMouseOutCallback?: (e: any) => void;
-    onValueClickCallback?: (dataPoint: SeriesPoint | null) => void;
+    handleValueMouseOver?: (dataPoint: SeriesPoint, e: React.MouseEvent<HTMLElement>) => void;
+    handleValueMouseOut?: (e: any) => void;
+    handleValueClick?: (dataPoint: SeriesPoint | null) => void;
 }
 
 const XYChart: React.FC<XYChartProps> = (props) => {
     const [averageSeries, setAverageSeries] = useState<Series | null>();
+    const [crossHairValues, setCrossHairValues] = useState<LineMarkSeriesPoint[]>([]);
 
     const getAverageValue = () => {
         return props.data.values.reduce((acc, d) => acc + Number(d.y), 0) / props.data.values.length;
@@ -67,27 +68,37 @@ const XYChart: React.FC<XYChartProps> = (props) => {
     const onValueClick = (datapoint: SeriesPoint, e: any) => {
         e.event.stopPropagation();
 
-        if(!props.onValueClickCallback) { return; }
-        props.onValueClickCallback(datapoint);
-    }
-
-    const onValueMouseOver = (datapoint: SeriesPoint, e: any) => {
-        e.event.stopPropagation();
-
-        if(!props.onValueMouseOverCallback) { return; }
-        props.onValueMouseOverCallback(datapoint, e.event.target);
+        if(!props.handleValueClick) { return; }
+        props.handleValueClick(datapoint);
     }
 
     const onValueMouseOut = (datapoint: SeriesPoint, e: any) => {
         e.event.stopPropagation();
 
-        if(!props.onValueMouseOutCallback) { return; }
-        props.onValueMouseOutCallback(e);
+        if(!props.handleValueMouseOut) { return; }
+        props.handleValueMouseOut(e);
+    }
+
+    const onMouseLeave = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCrossHairValues([]);
+
+        if(!props.handleValueMouseOut) { return; }
+        props.handleValueMouseOut(e);
     }
 
     const onClick = () => {
-        if(!props.onValueClickCallback) { return; }
-        props.onValueClickCallback(null);
+        if(!props.handleValueClick) { return; }
+        props.handleValueClick(null);
+    }
+
+    const onNearestXY = (value: LineMarkSeriesPoint, e: any) => {
+        e.event.stopPropagation();
+
+        setCrossHairValues([value]);
+
+        if(!props.handleValueMouseOver) { return; }
+        props.handleValueMouseOver(value, e.event);
     }
 
     return (
@@ -105,6 +116,7 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                         height={600}
                         // style={{position: "absolute"}}
                         onClick={onClick}
+                        onMouseLeave={onMouseLeave}
                         style={{marginTop: "5em"}}
                     >
                         <VerticalGridLines />
@@ -116,8 +128,8 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                             className="mark-series-overrides"
                             data={props.data.values}
                             onValueClick={onValueClick}
-                            onValueMouseOver={onValueMouseOver}
                             onValueMouseOut={onValueMouseOut}
+                            onNearestX={onNearestXY}
                             // style={{
                             //     strokeWidth: '3px'
                             // }}
@@ -143,6 +155,10 @@ const XYChart: React.FC<XYChartProps> = (props) => {
                                 label: `AVG = ${Number(averageSeries?.values[0].y).toFixed(2)}`
                             }] as any[]}/>
                         }
+
+                        <Crosshair values={crossHairValues}>
+                            <div/>
+                        </Crosshair>
                     </FlexibleXYPlot>
                     <DiscreteColorLegend items={getLegend()} orientation={"horizontal"} />
                     {props.children}

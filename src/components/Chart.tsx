@@ -4,7 +4,6 @@ import XYChart from "./XYChart";
 import {SeriesPoint} from "../models/series-point.model";
 import {Series} from "../models/series.model";
 import moment from "moment";
-import {Card, CardContent, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
 import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartProps {
@@ -23,13 +22,14 @@ const Chart: React.FC<ChartProps> = (props) => {
 
     const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition | null>( null);
 
-    const onValueMouseOver = (datapoint: any, targetElement: SVGGraphicsElement) => {
+    const onValueMouseOver = (datapoint: SeriesPoint, e: React.MouseEvent<HTMLElement>) => {
         setTooltipPosition({
-            x: targetElement.getBoundingClientRect().x + 20,
-            y: targetElement.getBoundingClientRect().y + 20,
+            x: e.clientX + 20,
+            y: e.clientY,
             datapoint
         });
     }
+
 
     const onValueMouseOut = (e: any) => {
         setTooltipPosition(null);
@@ -53,7 +53,7 @@ const Chart: React.FC<ChartProps> = (props) => {
 
     return (
         <div data-testid={"Chart"}>
-            <XYChart data={props.data} showAverage={props.showAverage} onValueMouseOverCallback={onValueMouseOver} onValueMouseOutCallback={onValueMouseOut}>
+            <XYChart data={props.data} showAverage={props.showAverage} handleValueMouseOver={onValueMouseOver} handleValueMouseOut={onValueMouseOut}>
                 <Tooltip show={!!tooltipPosition} position={{...tooltipPosition!}} content={TooltipContent} />
             </XYChart>
         </div>
