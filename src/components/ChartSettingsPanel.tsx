@@ -24,13 +24,21 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: "5em",
             color: "#fff",
             backgroundColor: "#e68342",
-            float: "right"
+            borderRadius: "1px",
+            margin: "5px",
+            position: "absolute",
+            bottom: "2em",
+            right: "8em"
         },
         applyButton: {
             marginTop: "5em",
             color: "#fff",
             backgroundColor: "#28a745",
-            float: "right"
+            borderRadius: "1px",
+            margin: "5px",
+            position: "absolute",
+            bottom: "2em",
+            right: "0"
         },
     }),
 );
