@@ -12,8 +12,12 @@ import ChartSettingsPanel from "./ChartSettingsPanel";
 import {StockSettings} from "../models/stock.settings";
 import LoadingIndicator from "./LoadingIndicator";
 import ReactDOM from "react-dom";
+import {ChartSettingsService} from "../services/chart-settings.service";
 
 const StockPriceDashboard: React.FC = (props) => {
+    const chartService: ChartService = new ChartService();
+    const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
+
     const emptyChartData = {
         name: "",
         values: []
@@ -23,20 +27,17 @@ const StockPriceDashboard: React.FC = (props) => {
     const [chartData, setChartData] = useState<Series>(emptyChartData);
 
     const [selectedDateRangeShortcut, setSelectedDateRangeShortcut] = useState<DateRanges>(DateRanges.CurrentDay);
-    const [settings, setSettings] = useState<StockSettings>();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        const settings = chartSettings.getSettings();
+        if(!settings) { return; }
+
         getDataAsync(settings);
     }, []);
 
     useEffect(() => {
-        getDataAsync(settings);
-    }, [settings]);
-
-    useEffect(() => {
-        const chartService: ChartService = new ChartService();
         if(!stockData) { return; }
 
         if(stockData.s === "no_data") {
@@ -45,6 +46,8 @@ const StockPriceDashboard: React.FC = (props) => {
         }
 
         setIsLoading(true);
+
+        const settings = chartSettings.getSettings();
         const series = chartService.buildDataPoints(stockData, {seriesName: settings?.symbol});
         setChartData({
             name: settings?.symbol || "",
@@ -71,16 +74,13 @@ const StockPriceDashboard: React.FC = (props) => {
         }
     }
 
-    const handleApplySettings = (settings: StockSettings) => {
-        setSettings(settings);
+    const onApplySettings = (settings: StockSettings) => {
+        getDataAsync(settings);
     }
 
     const onDateRangeShortcutChange = (selectedDateRange: DateRanges, value: DateRange) => {
         setSelectedDateRangeShortcut(selectedDateRange);
-        setSettings({
-            ...settings,
-            dateRange: value
-        } as StockSettings)
+        chartSettings.setSpecificProperty("dateRange", value);
     }
 
     const getLoadingIndicatorContainer = () => {
@@ -89,14 +89,14 @@ const StockPriceDashboard: React.FC = (props) => {
 
     return (
         <Shell
-            settingsComponent={<ChartSettingsPanel handleApplySettings={handleApplySettings} />}
+            settingsComponent={<ChartSettingsPanel handleApplySettings={onApplySettings} />}
             contentComponent={
                 <>
                     { error }
                     {
                         !error &&
                         <>
-                            <Chart data={chartData} showAverage={settings?.showAverage} />
+                            <Chart data={chartData} showAverage={chartSettings.getSettings()?.showAverage} />
                             {
                                 isLoading &&
                                 ReactDOM.createPortal(<LoadingIndicator />, getLoadingIndicatorContainer()!)

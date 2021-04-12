@@ -11,7 +11,6 @@ import {StockSettings} from "../models/stock.settings";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import {useForceUpdate} from "../custom-hooks/force-update.hook";
 import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartSettingsPanelProps {
@@ -59,11 +58,6 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         onApplySettings();
     }, []);
 
-    useEffect(() => {
-        const settings: StockSettings = chartSettings.getSettings();
-        props.handleApplySettings({...settings});
-    }, [selectedSymbol]);
-
     const onSymbolChange = (value: string) => {
         setSelectedSymbol(value);
     }
@@ -99,8 +93,6 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
         setSelectedResolution(settings.resolution || selectedResolution);
         setSelectedDateRange(settings.dateRange || selectedDateRange);
         setShowAverage(settings.showAverage !== null && settings.showAverage !== undefined ? settings.showAverage : showAverage);
-
-        props.handleApplySettings({...settings});
     }
 
     return (

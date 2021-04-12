@@ -45,7 +45,7 @@ const StockSymbol: React.FC<StockSymbolProps> = (props) => {
         setSymbolOptions(dropdownOptions);
         if(dropdownOptions.length > 0) {
             onChangeSymbol(dropdownOptions[0]);
-            chartSettings.setSymbol("symbol", dropdownOptions[0].value as string);
+            chartSettings.setSpecificProperty("symbol", dropdownOptions[0].value as string);
         }
     }
 

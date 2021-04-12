@@ -2,7 +2,7 @@ import {StockSettings} from "../models/stock.settings";
 
 export class ChartSettingsService {
     private static instance: ChartSettingsService;
-    private settings: StockSettings = {} as StockSettings;
+    private settings: StockSettings | null = null;
 
     public static getInstance(): ChartSettingsService {
         if (!ChartSettingsService.instance) {
@@ -12,7 +12,7 @@ export class ChartSettingsService {
         return ChartSettingsService.instance;
     }
 
-    public setSymbol(property: keyof StockSettings, value: StockSettings[keyof StockSettings]) {
+    public setSpecificProperty(property: keyof StockSettings, value: StockSettings[keyof StockSettings]) {
         // @ts-ignore
         this.settings[property] = value;
     };
@@ -38,6 +38,6 @@ export class ChartSettingsService {
     }
 
     public getSettings() {
-        return {...this.settings};
+        return {...this.settings} as StockSettings;
     }
 }
