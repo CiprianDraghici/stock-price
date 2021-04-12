@@ -72,7 +72,7 @@ const StockPriceDashboard: React.FC = (props) => {
         setSettings({
             ...settings,
             dateRange: value
-        })
+        } as StockSettings)
     }
 
     return (

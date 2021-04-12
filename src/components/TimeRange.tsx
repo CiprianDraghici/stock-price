@@ -6,6 +6,7 @@ import {
 } from '@material-ui/pickers';
 import {DateRange} from "../models/date-range.model";
 import {Grid} from "@material-ui/core";
+import {useDateRange} from "../custom-hooks/date-range.hook";
 
 interface TimePeriodProps {
     dateRange?: DateRange;
@@ -13,27 +14,31 @@ interface TimePeriodProps {
 }
 
 const TimeRange: React.FC<TimePeriodProps> = (props) => {
-    const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(props.dateRange ? new Date(props.dateRange.startDate) : new Date());
-    const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(props.dateRange ? new Date(props.dateRange.endDate) : new Date());
+    const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(props.dateRange ? props.dateRange.startDate : new Date());
+    const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(props.dateRange ? props.dateRange.endDate : new Date());
+
+    const dateRange = useDateRange();
 
     const onStartDateChange = (date: Date | null) => {
         setSelectedStartDate(date);
+        dateRange.startDate.current = date;
     };
 
     const onEndDateChange = (date: Date | null) => {
         setSelectedEndDate(date);
+        dateRange.endDate.current = date;
     };
 
     const onClosePicker = () => {
         props.handlePeriodChange({
-            startDate: selectedStartDate || new  Date(),
-            endDate: selectedEndDate || new  Date()
+            startDate: dateRange.startDate.current || selectedStartDate!,
+            endDate: dateRange.endDate.current || selectedEndDate!
         });
     }
 
     useEffect(() => {
-        setSelectedStartDate(props.dateRange ? new Date(props.dateRange.startDate) : new Date());
-        setSelectedEndDate(props.dateRange ? new Date(props.dateRange.endDate) : new Date());
+        setSelectedStartDate(props.dateRange ? props.dateRange.startDate : new Date());
+        setSelectedEndDate(props.dateRange ? props.dateRange.endDate : new Date());
     }, [props.dateRange]);
 
     return (

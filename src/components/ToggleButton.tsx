@@ -1,17 +1,23 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Checkbox, CheckboxProps, FormControlLabel, Switch, withStyles} from "@material-ui/core";
 import { green } from "@material-ui/core/colors";
 
 interface StockPriceToolbarProps {
+    value?: boolean;
     label: string;
     handleShowStateChange: (value: boolean) => void;
 }
 
 const ToggleButton: React.FC<StockPriceToolbarProps> = (props) => {
-    const [showState, setShowState] = useState<boolean>(false);
+    const [showState, setShowState] = useState<boolean>(!!props.value);
+
+    useEffect(() => {
+        setShowState(!!props.value);
+    }, [props.value]);
 
     const onShowAverageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.checked;
+
         setShowState(value);
         props.handleShowStateChange(value);
     };

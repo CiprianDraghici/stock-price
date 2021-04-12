@@ -4,7 +4,6 @@ import {
     HorizontalGridLines,
     XAxis,
     YAxis,
-    DiscreteColorLegend,
     LineMarkSeries,
     FlexibleXYPlot,
     LineSeries,

@@ -11,6 +11,8 @@ import {StockSettings} from "../models/stock.settings";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import {useForceUpdate} from "../custom-hooks/force-update.hook";
+import {ChartSettingsService} from "../services/chart-settings.service";
 
 interface ChartSettingsPanelProps {
     handleApplySettings: (settings: StockSettings) => void;
@@ -34,9 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
+    const chartSettings: ChartSettingsService = ChartSettingsService.getInstance();
     const classes = useStyles();
 
-    const [selectedSymbol, setSelectedSymbol] = useState<string>("GAZ");
+    const [selectedSymbol, setSelectedSymbol] = useState<string>();
     const [selectedResolution, setSelectedResolution] = useState<Resolution>(Resolution.D);
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
         startDate: new Date(),
@@ -44,53 +47,23 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
     });
     const [showAverage, setShowAverage] = useState<boolean>(false);
 
-    const [settings, setSettings] = useState<StockSettings>();
-
     useEffect(() => {
         onApplySettings();
     }, []);
 
-    // useEffect(() => {
-    //     onApplySettings();
-    // }, [selectedSymbol, selectedResolution, selectedDateRange, showAverage]);
-
     const onSymbolChange = (value: string) => {
-        // const newSettings: StockSettings = {
-        //     ...settings,
-        //     symbol: value,
-        // };
-        //
-        // setSettings(newSettings);
         setSelectedSymbol(value);
     }
 
     const onResolutionChange = (value: Resolution) => {
-        // const newSettings: StockSettings = {
-        //     ...settings,
-        //     resolution: value,
-        // };
-        //
-        // setSettings(newSettings);
         setSelectedResolution(value);
     }
 
     const onDateRangeChange = (value: DateRange) => {
-        // const newSettings: StockSettings = {
-        //     ...settings,
-        //     dateRange: value,
-        // };
-        //
-        // setSettings(newSettings);
         setSelectedDateRange(value);
     }
 
     const onShowAverageChange = (value: boolean) => {
-        // const newSettings: StockSettings = {
-        //     ...settings,
-        //     showAverage: value,
-        // };
-        //
-        // setSettings(newSettings);
         setShowAverage(value);
     }
 
@@ -102,30 +75,29 @@ const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = (props) => {
             showAverage
         };
 
-        sessionStorage.setItem("StockPriceApp-ChartSettingsPanel", JSON.stringify(settings));
+        chartSettings.setSettings(settings);
         props.handleApplySettings({...settings});
     }
 
     const onResetSettings = () => {
-        const settings: StockSettings = JSON.parse(sessionStorage.getItem("StockPriceApp-ChartSettingsPanel") || "{}");
-        if(!settings) { return; }
+        const settings: StockSettings = chartSettings.getSettings();
 
         setSelectedSymbol(settings.symbol || selectedSymbol);
         setSelectedResolution(settings.resolution || selectedResolution);
         setSelectedDateRange(settings.dateRange || selectedDateRange);
-        setShowAverage(settings.showAverage ? settings.showAverage : showAverage);
+        setShowAverage(settings.showAverage !== null && settings.showAverage !== undefined ? settings.showAverage : showAverage);
 
         props.handleApplySettings({...settings});
     }
 
     return (
         <Panel>
-            <StockSymbol handleSymbolChange={onSymbolChange} />
+            <StockSymbol symbol={selectedSymbol} handleSymbolChange={onSymbolChange} />
             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                <ToggleButton label={"Show average"} handleShowStateChange={onShowAverageChange} />
+                <ToggleButton label={"Show average"} value={showAverage} handleShowStateChange={onShowAverageChange} />
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
-                <Resolutions selectedResolution={selectedResolution} handleResolutionChange={onResolutionChange} />
+                <Resolutions resolution={selectedResolution} handleResolutionChange={onResolutionChange} />
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="nowrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
                 <TimeRange dateRange={selectedDateRange} handlePeriodChange={onDateRangeChange} />

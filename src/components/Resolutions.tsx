@@ -1,17 +1,21 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Resolution} from "../enums/resolution.enum";
 import {Button, ButtonGroup} from "@material-ui/core";
 import ControlLabel from "./panel/ControlLabel";
 
 interface ResolutionsProps {
-    selectedResolution?: Resolution;
+    resolution?: Resolution;
     handleResolutionChange: (value: Resolution) => void;
 }
 
 const Resolutions: React.FC<ResolutionsProps> = (props) => {
-    const [selectedResolution, setSelectedResolution] = useState<string>(props.selectedResolution || Resolution.D);
 
+    const [selectedResolution, setSelectedResolution] = useState<string>(props.resolution || Resolution.D);
     const resolutionOptions = [ ...Object.keys(Resolution).filter(key => typeof key === "string") ];
+
+    useEffect(() => {
+        setSelectedResolution(props.resolution || Resolution.D);
+    }, [props.resolution]);
 
     const onChangeResolution = (resolutionOption: string) => (e: React.MouseEvent) => {
         setSelectedResolution(resolutionOption);
